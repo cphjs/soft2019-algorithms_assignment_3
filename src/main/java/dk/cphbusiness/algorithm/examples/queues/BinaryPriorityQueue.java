@@ -25,18 +25,30 @@ public class BinaryPriorityQueue<T extends Comparable<T>> implements PriorityQue
     public T dequeue() {
         if (size() == 0) return null;
         T item = get(1);
-        
+
         swap(1, --tail);
         int i = 1;
         while(i*2 < tail) {
             int j = i*2;
-            // If smaller than child
-            if (j < tail && get(j).compareTo(get(j+1)) < 0) {
-                swap(i, j);
+            int smaller = j;
+            if (j > tail) break;
+
+            
+            if (j + 1 >= tail) {
+                smaller = j;
+            }
+            else if (get(j).compareTo(get(j+1)) < 0) {
+                smaller =  j;
+            } else {
+                smaller = j+1;
+            }
+            
+            if (get(i).compareTo(get(smaller)) > 0) {
+                swap(i, smaller);
+                i = smaller;
             } else {
                 break;
             }
-            i = j;
         }
 
         return item;
